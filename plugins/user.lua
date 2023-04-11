@@ -10,10 +10,26 @@ return {
     end,
   },
   {
-    "folke/tokyonight.nvim"
+    "folke/tokyonight.nvim", -- Color Scheme
+    lazy = false,
+  },
+  {
+    "EdenEast/nightfox.nvim", -- Color Scheme
+    lazy = false,
   },
   {
     "mg979/vim-visual-multi",
     event = "BufEnter"
   },
+  {
+    "dart-lang/dart-vim-plugin",
+  },
+  {
+    'akinsho/flutter-tools.nvim',
+    after = "mason-lspconfig.nvim", -- make sure to load after mason-lspconfig
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'stevearc/dressing.nvim', -- optional for vim.ui.select
+    },
+  }
 }
