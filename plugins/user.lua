@@ -12,9 +12,21 @@ return {
   {
     "folke/tokyonight.nvim", -- Color Scheme
     lazy = false,
+    priority = 1000,
+    opts = {},
   },
   {
     "EdenEast/nightfox.nvim", -- Color Scheme
+    lazy = false,
+  },
+  {
+    "catppuccin/nvim",
+    name = "catppuccin",
+    priority = 1000,
+    lazy = false,
+  },
+  {
+    "rebelot/kanagawa.nvim",
     lazy = false,
   },
   {
