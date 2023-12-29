@@ -54,5 +54,10 @@ return {
       -- vim.keymap.set('i', '<c-,>', function() return vim.fn['codeium#CycleCompletions'](-1) end, { expr = true })
       -- vim.keymap.set('i', '<c-x>', function() return vim.fn['codeium#Clear']() end, { expr = true })
     end
+  },
+  {
+    "apple/sourcekit-lsp",
+    after = "mason-lspconfig.nvim", -- make sure to load after mason-lspconfig
+    ft = { "swift" },
   }
 }

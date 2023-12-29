@@ -51,10 +51,46 @@ return {
     servers = {
       -- "pyright"
       "dartls",
+      "sourcekit",
     },
     setup_handlers = {
       -- add custom handler
-      dartls = function(_, opts) require("flutter-tools").setup { lsp = opts } end,
+      dartls = function(_, opts) require("flutter-tools").setup { 
+        lsp = opts,
+        debugger = {
+          enabled = true
+        }
+      } end,
+      sourcekit = function(_, opts) require("lspconfig").sourcekit.setup { 
+        -- lsp = opts,
+        vim.api.nvim_create_autocmd('LspAttach', {
+          group = vim.api.nvim_create_augroup('UserLspConfig', {}),
+          callback = function(ev)
+            --enable omnifunc completion
+            vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+            -- buffer local mappings
+            local opts = { buffer = ev.buf }
+            -- go to definition
+            vim.keymap.set('n','gd',vim.lsp.buf.definition,opts)
+            --puts doc header info into a float page
+            vim.keymap.set('n','K',vim.lsp.buf.hover,opts)
+
+            -- workspace management. Necessary for multi-module projects
+            vim.keymap.set('n','<space>wa',vim.lsp.buf.add_workspace_folder, opts)
+            vim.keymap.set('n','<space>wr',vim.lsp.buf.remove_workspace_folder, opts)
+            vim.keymap.set('n','<space>wl',function()
+                    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+            end,opts)
+
+            -- add LSP code actions
+            vim.keymap.set({'n','v'},'<space>ca',vim.lsp.buf.code_action,opts)                
+
+            -- find references of a type
+            vim.keymap.set('n','gr',vim.lsp.buf.references,opts)
+          end,
+        })
+      } end,
     },
     config = {
       dartls = {
@@ -67,6 +103,14 @@ return {
           completeFunctionCalls = true,
         },
       },
+      sourcekit = function()
+        return {
+          cmd = { "sourcekit-lsp" },
+          -- cmd = { "xcrun --toolchain swift sourcekit-lsp" },
+          filetypes = { "swift" },
+          root_dir = require("lspconfig.util").root_pattern("Package.swift", ".git")
+        }
+      end,
     },
   },
   -- Configure require("lazy").setup() options
